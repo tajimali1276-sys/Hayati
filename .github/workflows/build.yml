@@ -15,8 +15,14 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: 8.7
-      - run: gradle assembleDebug --no-daemon
+      - name: Build
         working-directory: proj/Hayati
+        run: |
+          set +e
+          gradle assembleDebug --no-daemon --console=plain > build.log 2>&1
+          code=$?
+          grep -E "^e: " build.log | head -20 | while read -r l; do echo "::error::$l"; done
+          exit $code
       - uses: actions/upload-artifact@v4
         with:
           name: Hayati-APK
