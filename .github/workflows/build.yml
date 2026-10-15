@@ -8,6 +8,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: unzip -o Hayati.zip -d proj
+      - name: Fix listen
+        run: sed -i 's/private fun listen() = h.post {/private fun listen(): Boolean = h.post {/' proj/Hayati/app/src/main/java/com/hayati/assistant/HayatiService.kt
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
